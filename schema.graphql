@@ -1,0 +1,34 @@
+type Account @entity {
+  id: ID! #id is a required field
+  lastActivityDate: Date!
+  lastTotalActivitiesCount: Int!
+  lastBalanceDepositsCount: Int!
+  lastBalanceTransfersCount: Int!
+  lastBalanceWithdrawsCount: Int!
+}
+
+# total count of activities with history
+type TotalActivity @entity {
+  id: ID!  # block_id + event_id
+  account: Account!
+  blockHeight: Int!
+  date: Date!
+  count: Int!
+}
+
+enum ActivityType {
+  BALANCE_DEPOSIT
+  BALANCE_TRANSFER
+  BALANCE_WITHDRAW
+}
+
+# count of different types of activities with history
+type Activity @entity {
+  id: ID!  # block_id + event_id
+  type: ActivityType!
+  account: Account!
+  blockHeight: Int!
+  date: Date!
+  count: Int!
+}
+
