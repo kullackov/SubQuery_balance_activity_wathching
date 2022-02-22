@@ -1,19 +1,24 @@
 type Account @entity {
   id: ID! #id is a required field
   lastActivityDate: Date!
-  lastTotalActivitiesCount: Int!
-  lastBalanceDepositsCount: Int!
-  lastBalanceTransfersCount: Int!
-  lastBalanceWithdrawsCount: Int!
+  allActivitiesCount: Int!        # accumulative count of all balance events (deposit + transfer + withdraw)
+  balanceDepositsCount: Int!      # accumulative count of balance deposit events
+  balanceTransfersCount: Int!     # accumulative count of balance transfer events
+  balanceWithdrawsCount: Int!     # accumulative count of balance withdraw events
+  totalVolume: BigInt!            # accumulative volume of all balance events (deposit + transfer + withdraw)
+  balanceDepositsVolume: BigInt!  # accumulative volume of balance deposits
+  balanceTransfersVolume: BigInt! # accumulative volume of balance transfers
+  balanceWithdrawsVolume: BigInt! # accumulative volume of balance withdraws
 }
 
-# total count of activities with history
+# total count of activities and volume with history
 type TotalActivity @entity {
   id: ID!  # block_id + event_id
   account: Account!
   blockHeight: Int!
   date: Date!
-  count: Int!
+  count: Int!  # accumulative count  of all types of activities
+  totalVolume: BigInt! # accumulative volume of all types of activities
 }
 
 enum ActivityType {
@@ -22,13 +27,14 @@ enum ActivityType {
   BALANCE_WITHDRAW
 }
 
-# count of different types of activities with history
+# count and volume of different types of activities with history
 type Activity @entity {
   id: ID!  # block_id + event_id
   type: ActivityType!
   account: Account!
   blockHeight: Int!
   date: Date!
-  count: Int!
+  count: Int!  # accumulative count  of events of the type
+  totalVolume: BigInt! # accumulative volume of events of the type
 }
 
